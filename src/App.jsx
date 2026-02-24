@@ -1,7 +1,9 @@
-export default function newApp() {
+import Navbar from "./components/Navbar";
+
+export default function NewApp() {
   return (
     <div>
-      <h1>Hello</h1>
+      <Navbar />
     </div>
   )
 }
