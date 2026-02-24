@@ -1,7 +1,9 @@
+import Logo from "./Logo"
+
 export default function Navbar() {
     return (
         <div>
-            <h1>Hello</h1>
+            <Logo />
         </div>
     )
 }
