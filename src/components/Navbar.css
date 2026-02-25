@@ -24,12 +24,34 @@
     display: flex;
     justify-content: center;
     gap: 30px;
+    font-size: 18px;
 }
 
 .nav-center a {
+  position: relative;
   text-decoration: none;
   color: inherit;
   font-weight: 500;
+  padding-bottom: 4px;
+}
+
+.nav-center a:hover {
+    color: #7C7CF8;
+}
+
+.nav-center a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #7C7CF8; 
+  transition: width 0.3s ease;
+}
+
+.nav-center a:hover::after {
+  width: 100%;
 }
 
 .nav-right {
