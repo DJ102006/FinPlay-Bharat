@@ -1,4 +1,5 @@
 import Logo from "./Logo"
+import Toggle from "./Toggle"
 import "./Navbar.css"
 
 export default function Navbar() {
@@ -16,8 +17,8 @@ export default function Navbar() {
             </div>
 
             <div className="nav-right">
-                <button>Login</button>
-                <button>Toggle</button>
+                <button className="login-btn">Login</button>
+                <Toggle />
             </div>
             
             

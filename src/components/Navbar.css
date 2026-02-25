@@ -28,11 +28,26 @@
 
 .nav-center a {
   text-decoration: none;
-  color: black;
+  color: inherit;
   font-weight: 500;
 }
 
 .nav-right {
   display: flex;
   gap: 15px;
+}
+
+.login-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.login-btn:hover {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
 }
