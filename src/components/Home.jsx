@@ -4,7 +4,7 @@ import Features from "./Features"
 
 export default function Home() {
   return (
-    <div>
+    <div id="home">
       
         <div className="hometext">
             <Hero />

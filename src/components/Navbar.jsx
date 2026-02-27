@@ -9,7 +9,7 @@ export default function Navbar() {
             <Logo />
 
             <div className="nav-center">
-                <a href="/">Home</a>
+                <a href="#home">Home</a>
                 <a href="#features">Features</a>
                 <a href="#">Demo</a>
                 <a href="#">How it Works</a>
