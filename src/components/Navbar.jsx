@@ -14,7 +14,14 @@ export default function Navbar() {
                 <Link to="/#features">Features</Link>
                 <Link to="/demo">Demo</Link>
                 <Link to="/#how">How it Works</Link>
-                <a href="#">Company</a>
+                <span className="dropdown">
+                    <span className="nav-link">Company</span>
+
+                    <div className="dropdown-menu">
+                        <Link to="/about">About Us</Link>
+                        <Link to="/partners">Partners</Link>
+                    </div>
+                </span>
             </div>
 
             <div className="nav-right">
