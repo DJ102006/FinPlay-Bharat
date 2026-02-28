@@ -1,0 +1,44 @@
+.demo-container {
+  padding: 120px 8%;
+  min-height: 100vh;
+}
+
+.summary {
+  display: flex;
+  gap: 40px;
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.card {
+  background: #111827;
+  padding: 25px;
+  border-radius: 20px;
+  border: 1px solid #7c3aed;
+}
+
+.card button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background: #7c3aed;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.reset {
+  margin-top: 40px;
+  padding: 10px 20px;
+  background: #ef4444;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}

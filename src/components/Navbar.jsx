@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import Logo from "./Logo"
 import Toggle from "./Toggle"
 import "./Navbar.css"
@@ -11,7 +12,7 @@ export default function Navbar() {
             <div className="nav-center">
                 <a href="#home">Home</a>
                 <a href="#features">Features</a>
-                <a href="#">Demo</a>
+                <Link to="/demo">Demo</Link>
                 <a href="#">How it Works</a>
                 <a href="#">Company</a>
             </div>
