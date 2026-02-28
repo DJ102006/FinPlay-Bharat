@@ -1,3 +1,24 @@
 html {
     scroll-behavior: smooth;
 }
+
+body {
+  margin: 0;
+  background: var(--bg-main);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+:root {
+  --bg-main: #ffffff;
+  --text-color: #111;
+  --card-bg: #f3f4f6;
+  --primary: #3b5bff;
+}
+
+.dark {
+  --bg-main: linear-gradient(135deg, #0f172a, #020617);
+  --text-color: #ffffff;
+  --card-bg: #1a1a22;
+  --primary: #3b5bff;
+}

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom"
 import "./Home.css"
 import Hero from "./Hero"
 import Features from "./Features"
+import HowItWorks from "./HowItWorks"
 
 export default function Home() {
 
@@ -23,6 +24,7 @@ export default function Home() {
         <div className="hometext">
             <Hero />
             <Features />
+            <HowItWorks />
         </div>
 
     </div>

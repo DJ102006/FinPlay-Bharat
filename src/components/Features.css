@@ -1,3 +1,7 @@
+body {
+  background: var(--bg-main);
+}
+
 .features {
   padding: 100px 8%;
   text-align: center;
