@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link , useNavigate} from "react-router-dom"
 import Logo from "./Logo"
 import Toggle from "./Toggle"
 import "./Navbar.css"
@@ -10,8 +10,8 @@ export default function Navbar() {
             <Logo />
 
             <div className="nav-center">
-                <a href="#home">Home</a>
-                <a href="#features">Features</a>
+                <Link to="/">Home</Link>
+                <Link to="/#features">Features</Link>
                 <Link to="/demo">Demo</Link>
                 <a href="#">How it Works</a>
                 <a href="#">Company</a>

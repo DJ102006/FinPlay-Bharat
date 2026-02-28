@@ -74,3 +74,11 @@
     color: white;
     border-color: #22c55e;
 }
+
+.nav-link-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
