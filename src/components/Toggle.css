@@ -1,0 +1,16 @@
+.toggle-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: transparent;
+    cursor: pointer;
+    color: inherit;
+    transition: all 0.2s;
+    font-size: 15px;
+}
+
+.toggle-btn:hover {
+    background: #22c55e;
+    color: white;
+    border-color: #22c55e;
+}

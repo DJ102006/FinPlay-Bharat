@@ -1,0 +1,34 @@
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.rs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 45px;
+    height: 45px;
+
+    border-radius: 25%;
+    background: linear-gradient(135deg, #6C63FF, #4F46E5);
+    color: #fff;
+
+    font-size: 25px;
+    font-weight: 600;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.text {
+    font-size: 25px;
+}
+
+.text span {
+    color: #7C7CF8;
+    margin-left: 0px;
+}
