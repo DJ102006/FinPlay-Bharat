@@ -1,5 +1,7 @@
 # React + Vite
 
+Hosted URL for Testing: https://dj102006.github.io/FinPlay-Bharat/
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
