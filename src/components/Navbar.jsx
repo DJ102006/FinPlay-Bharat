@@ -4,6 +4,8 @@ import Toggle from "./Toggle"
 import "./Navbar.css"
 
 export default function Navbar() {
+    const navigate = useNavigate()
+
     return (
         <div className="navbar">    
 
@@ -25,7 +27,7 @@ export default function Navbar() {
             </div>
 
             <div className="nav-right">
-                <button className="login-btn">Login</button>
+                <button className="login-btn" onClick={() => navigate("/login")}>Login</button>
                 <Toggle />
             </div>
             

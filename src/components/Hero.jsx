@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 import "./Hero.css"
 import dashboardImg from "../assets/dashboard.png"
 import card1 from "../assets/card1.png"
@@ -5,6 +6,8 @@ import card2 from "../assets/card2.png"
 import card3 from "../assets/card3.png"
 
 export default function Hero() {
+  const navigate = useNavigate()
+
   return (
     <section className="hero">
 
@@ -21,8 +24,8 @@ export default function Hero() {
         </p>
 
         <div className="hero-buttons">
-          <button className="primary-btn">Start Learning Free</button>
-          <button className="secondary-btn">Watch Demo</button>
+          <button className="primary-btn" onClick={() => navigate("/login")}>Start Learning Free</button>
+          <button className="secondary-btn" onClick={() => navigate("/demo")}>Watch Demo</button>
         </div>
       </div>
 

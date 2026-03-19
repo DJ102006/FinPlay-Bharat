@@ -1,13 +1,17 @@
+import { useNavigate } from "react-router-dom"
 import "./Features.css"
 
 export default function Features() {
+
+  const navigate = useNavigate()
 
   const features = [
     {
       title: "Budget Simulator",
       desc: "Manage virtual ₹20,000 salary with real-life expenses.",
       tag: "Most Popular",
-      icon: "₹"
+      icon: "₹",
+      link: "/demo"
     },
     {
       title: "Fraud Detection Game",
@@ -51,7 +55,7 @@ export default function Features() {
 
       <div className="features-grid">
         {features.map((item, index) => (
-          <div key={index} className="feature-card">
+          <div key={index} className="feature-card" onClick={() => item.link && navigate(item.link)} style={{ cursor: item.link ? 'pointer' : 'default' }}>
             <div className="icon">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.desc}</p>

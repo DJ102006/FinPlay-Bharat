@@ -2,23 +2,31 @@ html {
     scroll-behavior: smooth;
 }
 
-body {
-  margin: 0;
-  background: var(--bg-main);
-  color: var(--text-color);
-  transition: background 0.3s ease, color 0.3s ease;
-}
+
 
 :root {
   --bg-main: #ffffff;
-  --text-color: #111;
-  --card-bg: #f3f4f6;
+  --text-color: #0f172a;
+  --card-bg: #f8fafc;
   --primary: #3b5bff;
+  --card-border: rgba(59, 91, 255, 0.1);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .dark {
   --bg-main: linear-gradient(135deg, #0f172a, #020617);
-  --text-color: #ffffff;
-  --card-bg: #1a1a22;
+  --text-color: #f8fafc;
+  --card-bg: #1e293b;
   --primary: #3b5bff;
+  --card-border: rgba(59, 91, 255, 0.2);
+  --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+body {
+  margin: 0;
+  background: var(--bg-main);
+  background-attachment: fixed;
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
 }
