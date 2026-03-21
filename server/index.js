@@ -19,6 +19,7 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@finplaybharat.com';
 const DB_NAME = process.env.MONGODB_DB_NAME || 'finplay_bharat';
 const JWT_SECRET = process.env.JWT_SECRET;
 const uri = process.env.MONGODB_URI;
+const DB_RETRY_DELAY_MS = Number(process.env.DB_RETRY_DELAY_MS || 10000);
 
 const missingEnvVars = ['MONGODB_URI', 'JWT_SECRET'].filter((key) => !process.env[key]);
 if (missingEnvVars.length > 0) {
@@ -31,20 +32,60 @@ app.use(express.json());
 
 let client = null;
 let db = null;
+let dbStatus = 'disconnected';
+let dbLastError = null;
+let dbRetryTimer = null;
+let dbConnectPromise = null;
 
 async function connectDB() {
-  console.log("Attempting to connect to MongoDB Atlas...");
-  const connectionUri = await resolveMongoConnectionUri(uri);
-  client = new MongoClient(connectionUri, {
-    serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
-    serverSelectionTimeoutMS: 10000,
-    connectTimeoutMS: 30000,
-    socketTimeoutMS: 45000,
-  });
-  await client.connect();
-  db = client.db(DB_NAME);
-  await db.command({ ping: 1 });
-  console.log(`✅ Connected to MongoDB Atlas database "${DB_NAME}"`);
+  if (dbConnectPromise) {
+    return dbConnectPromise;
+  }
+
+  dbStatus = 'connecting';
+  dbConnectPromise = (async () => {
+    try {
+      console.log('Attempting to connect to MongoDB Atlas...');
+      const connectionUri = await resolveMongoConnectionUri(uri);
+      const nextClient = new MongoClient(connectionUri, {
+        serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
+        serverSelectionTimeoutMS: 10000,
+        connectTimeoutMS: 30000,
+        socketTimeoutMS: 45000,
+      });
+      await nextClient.connect();
+      const nextDb = nextClient.db(DB_NAME);
+      await nextDb.command({ ping: 1 });
+
+      await client?.close().catch(() => {});
+      client = nextClient;
+      db = nextDb;
+      dbStatus = 'connected';
+      dbLastError = null;
+      console.log(`✅ Connected to MongoDB Atlas database "${DB_NAME}"`);
+    } catch (error) {
+      db = null;
+      dbStatus = 'disconnected';
+      dbLastError = error.message;
+      console.error(`❌ MongoDB connection failed: ${error.message}`);
+      scheduleReconnect();
+    } finally {
+      dbConnectPromise = null;
+    }
+  })();
+
+  return dbConnectPromise;
+}
+
+function scheduleReconnect() {
+  if (dbRetryTimer) {
+    return;
+  }
+
+  dbRetryTimer = setTimeout(() => {
+    dbRetryTimer = null;
+    void connectDB();
+  }, DB_RETRY_DELAY_MS);
 }
 
 // ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
@@ -52,7 +93,10 @@ async function connectDB() {
 function requireDatabase(req, res, next) {
   if (!db) {
     return res.status(503).json({
-      message: 'Database connection is unavailable. Check MongoDB configuration and connectivity.',
+      message: 'Database connection is unavailable. The server is running and retrying MongoDB in the background.',
+      database: dbStatus,
+      retryInMs: DB_RETRY_DELAY_MS,
+      error: dbLastError,
     });
   }
   next();
@@ -86,8 +130,9 @@ async function requireAdmin(req, res, next) {
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
-    database: db ? 'connected' : 'disconnected',
+    database: dbStatus,
     databaseName: DB_NAME,
+    error: dbLastError,
   });
 });
 
@@ -303,13 +348,10 @@ app.get('/api/admin/stats', requireDatabase, verifyToken, requireAdmin, async (r
 });
 
 async function startServer() {
-  try {
-    await connectDB();
-    app.listen(PORT, () => console.log(`✅ Backend running on port ${PORT}`));
-  } catch (error) {
-    console.error('❌ Failed to start backend:', error.name, error.message);
-    process.exit(1);
-  }
+  app.listen(PORT, () => {
+    console.log(`✅ Backend running on port ${PORT}`);
+    void connectDB();
+  });
 }
 
 process.on('SIGINT', async () => {
