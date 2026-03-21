@@ -1,5 +1,6 @@
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
 }
 
 
@@ -7,19 +8,27 @@ html {
 :root {
   --bg-main: #ffffff;
   --text-color: #0f172a;
+  --text-muted: #64748b;
   --card-bg: #f8fafc;
+  --card-bg-alt: #f1f5f9;
   --primary: #3b5bff;
   --card-border: rgba(59, 91, 255, 0.1);
   --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --overlay-bg: rgba(248, 250, 252, 0.85);
+  --loader-track: rgba(0,0,0,0.08);
 }
 
 .dark {
   --bg-main: linear-gradient(135deg, #0f172a, #020617);
   --text-color: #f8fafc;
+  --text-muted: #94a3b8;
   --card-bg: #1e293b;
+  --card-bg-alt: #0f172a;
   --primary: #3b5bff;
   --card-border: rgba(59, 91, 255, 0.2);
   --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --overlay-bg: rgba(15, 23, 42, 0.85);
+  --loader-track: rgba(255,255,255,0.1);
 }
 
 body {

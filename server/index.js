@@ -4,125 +4,364 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { resolveMongoConnectionUri } from './mongoUri.js';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@finplaybharat.com';
+const DB_NAME = process.env.MONGODB_DB_NAME || 'finplay_bharat';
+const JWT_SECRET = process.env.JWT_SECRET;
+const uri = process.env.MONGODB_URI;
+const DB_RETRY_DELAY_MS = Number(process.env.DB_RETRY_DELAY_MS || 10000);
 
-// Middleware
+const missingEnvVars = ['MONGODB_URI', 'JWT_SECRET'].filter((key) => !process.env[key]);
+if (missingEnvVars.length > 0) {
+  console.error(`❌ Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  process.exit(1);
+}
+
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.MONGODB_URI;
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-let db;
+let client = null;
+let db = null;
+let dbStatus = 'disconnected';
+let dbLastError = null;
+let dbRetryTimer = null;
+let dbConnectPromise = null;
 
 async function connectDB() {
+  if (dbConnectPromise) {
+    return dbConnectPromise;
+  }
+
+  dbStatus = 'connecting';
+  dbConnectPromise = (async () => {
+    try {
+      console.log('Attempting to connect to MongoDB Atlas...');
+      const connectionUri = await resolveMongoConnectionUri(uri);
+      const nextClient = new MongoClient(connectionUri, {
+        serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
+        serverSelectionTimeoutMS: 10000,
+        connectTimeoutMS: 30000,
+        socketTimeoutMS: 45000,
+      });
+      await nextClient.connect();
+      const nextDb = nextClient.db(DB_NAME);
+      await nextDb.command({ ping: 1 });
+
+      await client?.close().catch(() => {});
+      client = nextClient;
+      db = nextDb;
+      dbStatus = 'connected';
+      dbLastError = null;
+      console.log(`✅ Connected to MongoDB Atlas database "${DB_NAME}"`);
+    } catch (error) {
+      db = null;
+      dbStatus = 'disconnected';
+      dbLastError = error.message;
+      console.error(`❌ MongoDB connection failed: ${error.message}`);
+      scheduleReconnect();
+    } finally {
+      dbConnectPromise = null;
+    }
+  })();
+
+  return dbConnectPromise;
+}
+
+function scheduleReconnect() {
+  if (dbRetryTimer) {
+    return;
+  }
+
+  dbRetryTimer = setTimeout(() => {
+    dbRetryTimer = null;
+    void connectDB();
+  }, DB_RETRY_DELAY_MS);
+}
+
+// ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
+
+function requireDatabase(req, res, next) {
+  if (!db) {
+    return res.status(503).json({
+      message: 'Database connection is unavailable. The server is running and retrying MongoDB in the background.',
+      database: dbStatus,
+      retryInMs: DB_RETRY_DELAY_MS,
+      error: dbLastError,
+    });
+  }
+  next();
+}
+
+function verifyToken(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Bearer '))
+    return res.status(401).json({ message: 'No token provided' });
   try {
-    await client.connect();
-    db = client.db("finplay_bharat");
-    console.log("Connected to MongoDB successfully!");
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
+    req.user = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ message: 'Invalid token' });
   }
 }
 
-connectDB();
+async function requireAdmin(req, res, next) {
+  try {
+    const user = await db.collection('users').findOne({ _id: new ObjectId(req.user.id) });
+    if (!user || !user.isAdmin)
+      return res.status(403).json({ message: 'Admin access required' });
+    next();
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 
-// --- AUTH ENDPOINTS ---
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
 
-// Register
-app.post('/api/auth/signup', async (req, res) => {
+app.get('/api/health', (req, res) => {
+  res.json({
+    ok: true,
+    database: dbStatus,
+    databaseName: DB_NAME,
+    error: dbLastError,
+  });
+});
+
+app.post('/api/auth/signup', requireDatabase, async (req, res) => {
   try {
     const { name, email, password, age, language } = req.body;
+    const normalizedEmail = email?.trim().toLowerCase();
+    const trimmedName = name?.trim();
 
-    const usersCollection = db.collection("users");
-    const existingUser = await usersCollection.findOne({ email });
-
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+    if (!trimmedName || !normalizedEmail || !password) {
+      return res.status(400).json({ message: 'Name, email, and password are required' });
     }
 
-    // Hash password (12 salt rounds as per privacy-policy.html)
-    const salt = await bcrypt.genSalt(12);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const usersCol = db.collection('users');
+    if (await usersCol.findOne({ email: normalizedEmail }))
+      return res.status(400).json({ message: 'User already exists' });
 
-    const newUser = {
-      name,
-      email,
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const isAdmin = normalizedEmail === ADMIN_EMAIL.toLowerCase();
+
+    const result = await usersCol.insertOne({
+      name: trimmedName,
+      email: normalizedEmail,
       password: hashedPassword,
-      age,
-      language,
+      age: age ?? null,
+      language: language ?? null,
+      isAdmin,
+      finCoins: 100, // Initial bonus
+      streak: 1,
+      lastLogin: new Date(),
+      totalScore: 0,
       createdAt: new Date()
-    };
-
-    const result = await usersCollection.insertOne(newUser);
-    
-    // Create JWT
-    const token = jwt.sign({ id: result.insertedId }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-    res.status(201).json({ token, user: { id: result.insertedId, name, email } });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-});
-
-// Login
-app.post('/api/auth/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const usersCollection = db.collection("users");
-    const user = await usersCollection.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-    res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// --- ACTIVITY ENDPOINTS ---
-
-app.post('/api/activity', async (req, res) => {
-  try {
-    const { userId, gameType, score, progress } = req.body;
-    const activityCollection = db.collection("activity");
-
-    await activityCollection.insertOne({
-      userId: new ObjectId(userId),
-      gameType,
-      score,
-      progress,
-      updatedAt: new Date()
     });
 
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ message: "Error saving activity" });
+    const token = jwt.sign({ id: result.insertedId.toString() }, JWT_SECRET, { expiresIn: '7d' });
+    res.status(201).json({
+      token,
+      user: {
+        id: result.insertedId.toString(),
+        name: trimmedName,
+        email: normalizedEmail,
+        isAdmin,
+        finCoins: 100,
+        streak: 1,
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend server running on port ${PORT}`);
+app.post('/api/auth/login', requireDatabase, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const normalizedEmail = email?.trim().toLowerCase();
+
+    if (!normalizedEmail || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const usersCol = db.collection('users');
+    const user = await usersCol.findOne({ email: normalizedEmail });
+    if (!user) return res.status(400).json({ message: 'User not found' });
+
+    if (!await bcrypt.compare(password, user.password))
+      return res.status(400).json({ message: 'Invalid credentials' });
+
+    // Handle Daily Streak & Bonus
+    const now = new Date();
+    const last = new Date(user.lastLogin || 0);
+    const dayDiff = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+    
+    let newStreak = user.streak || 1;
+    let coinsEarned = 0;
+
+    if (dayDiff === 1) {
+      newStreak += 1;
+      coinsEarned = 20; // Daily bonus
+    } else if (dayDiff > 1) {
+      newStreak = 1; // Reset
+    }
+
+    await usersCol.updateOne(
+      { _id: user._id },
+      { 
+        $set: { lastLogin: now, streak: newStreak },
+        $inc: { finCoins: coinsEarned }
+      }
+    );
+
+    const token = jwt.sign({ id: user._id.toString() }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { 
+      id: user._id.toString(), name: user.name, email: user.email, isAdmin: user.isAdmin,
+      finCoins: (user.finCoins || 0) + coinsEarned, streak: newStreak
+    }});
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
 });
+
+// ─── LEADERBOARD ──────────────────────────────────────────────────────────────
+
+app.get('/api/leaderboard', requireDatabase, async (req, res) => {
+  try {
+    const top = await db.collection('users')
+      .find({}, { projection: { name: 1, totalScore: 1, streak: 1 } })
+      .sort({ totalScore: -1 })
+      .limit(10)
+      .toArray();
+    res.json(top);
+  } catch {
+    res.status(500).json({ message: 'Error fetching leaderboard' });
+  }
+});
+
+// ─── ACTIVITY ─────────────────────────────────────────────────────────────────
+
+app.post('/api/activity', requireDatabase, verifyToken, async (req, res) => {
+  try {
+    const { gameType, score, progress } = req.body;
+    const usersCol = db.collection('users');
+    const userId = req.user.id;
+
+    if (!gameType || !progress) {
+      return res.status(400).json({ message: 'Game type and progress are required' });
+    }
+    
+    // Reward coins for completing a hub
+    let coinsToAward = 0;
+    if (progress === 'Completed') coinsToAward = 150;
+    const numericScore = Number.isFinite(Number(score)) ? Number(score) : 0;
+    const userObjectId = new ObjectId(userId);
+    const existingUser = await usersCol.findOne({ _id: userObjectId }, { projection: { _id: 1 } });
+
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    await Promise.all([
+      db.collection('activity').insertOne({
+        userId: userObjectId,
+        gameType,
+        score: numericScore,
+        progress,
+        updatedAt: new Date()
+      }),
+      usersCol.updateOne(
+        { _id: userObjectId },
+        { 
+          $inc: { finCoins: coinsToAward, totalScore: numericScore }
+        }
+      )
+    ]);
+
+    res.json({ success: true, coinsAwarded: coinsToAward });
+  } catch (err) {
+    res.status(500).json({ message: 'Error saving activity', error: err.message });
+  }
+});
+
+// ─── UPDATES (Public Read) ────────────────────────────────────────────────────
+
+app.get('/api/updates', requireDatabase, async (req, res) => {
+  try {
+    const updates = await db.collection('updates').find({}).sort({ createdAt: -1 }).toArray();
+    res.json(updates);
+  } catch {
+    res.status(500).json({ message: 'Error fetching updates' });
+  }
+});
+
+// ─── UPDATES (Admin Write/Delete) ────────────────────────────────────────────
+
+app.post('/api/updates', requireDatabase, verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const { title, body, category, emoji } = req.body;
+    if (!title || !body) return res.status(400).json({ message: 'Title and body required' });
+
+    const result = await db.collection('updates').insertOne({
+      title, body,
+      category: category || 'Feature',
+      emoji: emoji || '🚀',
+      createdAt: new Date()
+    });
+    res.status(201).json({ success: true, id: result.insertedId });
+  } catch {
+    res.status(500).json({ message: 'Error creating update' });
+  }
+});
+
+app.delete('/api/updates/:id', requireDatabase, verifyToken, requireAdmin, async (req, res) => {
+  try {
+    await db.collection('updates').deleteOne({ _id: new ObjectId(req.params.id) });
+    res.json({ success: true });
+  } catch {
+    res.status(500).json({ message: 'Error deleting update' });
+  }
+});
+
+// ─── ADMIN STATS ──────────────────────────────────────────────────────────────
+
+app.get('/api/admin/stats', requireDatabase, verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const [totalUsers, completions, totalUpdates] = await Promise.all([
+      db.collection('users').countDocuments(),
+      db.collection('activity').countDocuments({ progress: 'Completed' }),
+      db.collection('updates').countDocuments(),
+    ]);
+    res.json({ totalUsers, completions, totalUpdates });
+  } catch {
+    res.status(500).json({ message: 'Error fetching stats' });
+  }
+});
+
+async function startServer() {
+  app.listen(PORT, () => {
+    console.log(`✅ Backend running on port ${PORT}`);
+    void connectDB();
+  });
+}
+
+process.on('SIGINT', async () => {
+  await client?.close();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  await client?.close();
+  process.exit(0);
+});
+
+startServer();

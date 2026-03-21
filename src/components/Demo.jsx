@@ -120,7 +120,13 @@ export default function Demo() {
             </div>
 
             <div className="action-buttons">
-               <button className="simulate-btn" onClick={simulateDay}>▶▶ Simulate Next Day</button>
+               <button 
+                 className={`simulate-btn ${balance > 0 ? "locked" : ""}`} 
+                 onClick={simulateDay}
+                 disabled={balance > 0}
+               >
+                 {balance > 0 ? `▶▶ Allocate ₹${balance.toLocaleString()} first` : "▶▶ Simulate Next Day"}
+               </button>
                <button className="reset-inline" onClick={resetGame}>🔄 Reset Game</button>
             </div>
           </div>

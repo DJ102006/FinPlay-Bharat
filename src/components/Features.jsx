@@ -17,31 +17,36 @@ export default function Features() {
       title: "Fraud Detection Game",
       desc: "Identify phishing, UPI frauds, and scams in simulation.",
       tag: "Security",
-      icon: "🛡️"
+      icon: "🛡️",
+      link: "/hub/security"
     },
     {
       title: "Credit Score Challenge",
       desc: "Build virtual credit history through decisions.",
       tag: "Essential",
-      icon: "📊"
+      icon: "📊",
+      link: "/hub/essential"
     },
     {
       title: "Investment Basics",
       desc: "Virtual stock market & mutual fund simulations.",
       tag: "Advanced",
-      icon: "💰"
+      icon: "💰",
+      link: "/hub/advance"
+    },
+    {
+      title: "Budgeting Masterclass",
+      desc: "Learn the 50/30/20 rule and start saving.",
+      tag: "Growth",
+      icon: "📈",
+      link: "/hub/growth"
     },
     {
       title: "Adaptive Learning",
       desc: "Difficulty adjusts based on your performance.",
       tag: "AI-Powered",
-      icon: "🤖"
-    },
-    {
-      title: "Multi-language Support",
-      desc: "Available in Hindi, Gujarati, Marathi & more.",
-      tag: "For Bharat",
-      icon: "🌍"
+      icon: "🤖",
+      link: "/hub/adaptive"
     }
   ]
 

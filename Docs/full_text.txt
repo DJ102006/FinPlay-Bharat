@@ -1,0 +1,607 @@
+=== PAGE 1 ===
+ 
+ 
+ 
+ 
+ 
+Task2:  
+1: Make the “Security” button clickable. 
+When user taps/clicks the button, redirect to the Fraud 
+Detection page. 
+• 
+Add proper link/route 
+• 
+Must work on mobile tap & desktop click 
+• 
+Do not change design or styling 
+2: Detailed Prompt – Create Separate Fraud Detection Page (Video + Quiz + Certificate). 
+  Objective 
+Convert the Fraud Detection page into a Learning Hub that includes: 
+1. Government / trusted cyber-fraud awareness videos 
+2. Short quiz after each video 
+3. Auto-generated completion certificate 
+Keep it lightweight, scalable, and responsive. 
+ 
+  PAGE STRUCTURE 
+  Title: Fraud Detection & Cyber Safety Learning Hub 
+Subtitle: Learn to detect scams, phishing, UPI fraud & cyber crimes through expert-approved 
+training videos. 
+ 
+    Add 10–15 Directly Accessible Educational Videos 
+Embed videos using YouTube iframe (lazy loading enabled). 
+Eg. structure: <iframe  
+  src="VIDEO_LINK" 
+  title="Cyber Fraud Awareness" 
+  loading="lazy" 
+  allowfullscreen> 
+</iframe> 
+
+=== PAGE 2 ===
+ 
+ 
+ 
+ 
+  Recommended Direct Video Links (Embeddable) 
+  Phishing & Scam Awareness 
+1. https://www.youtube.com/watch?v=sg0kQYvTlnc 
+2. https://www.youtube.com/watch?v=XBkzBrXlle0 
+3. https://www.youtube.com/watch?v=QzLvq6FqCVY 
+4. https://www.youtube.com/watch?v=R12_y2BhKbE 
+  OTP / Mobile / UPI Safety 
+5. https://www.youtube.com/watch?v=oLqXDszWIMg 
+6. https://www.youtube.com/watch?v=v9_chkR-7AI 
+  Banking & Identity Theft 
+7. https://www.youtube.com/watch?v=AaVO31VoViQ 
+8. https://www.youtube.com/watch?v=QHlTi9CacTc 
+  General Cyber Crime Awareness 
+9. https://www.youtube.com/watch?v=BF-eamJ-g3g 
+10. https://www.youtube.com/watch?v=eowauGt1Z_g 
+ 
+    Quiz Section (After Videos) 
+After user watches videos, show: 
+Section Title: 
+Test Your Knowledge 
+Requirements: 
+• 
+5–10 MCQs 
+• 
+One correct answer per question 
+• 
+Show score instantly 
+• 
+Passing score: 70% 
+• 
+If failed → allow retry 
+• 
+If passed → unlock certificate 
+ 
+
+=== PAGE 3 ===
+[4] Certificate Generation Section
+When user passes quiz: 
+Display: 
+•
+User Name input
+•
+Generate simple certificate
+Certificate should show: 
+•
+User Name
+•
+Course Name: Cyber Fraud Awareness Training
+•
+Date of completion course
+•
+Unique Certificate ID
+Add: 
+•
+Download as PDF option
+•
+Or Print option
+
+=== PAGE 4 ===
+ 
+ Design Guidelines 
+•
+Maintain (dark/light) theme consistency
+•
+Video cards with:
+o
+Thumbnail
+o
+Title
+o
+Short description
+•
+Add progress indicator
+•
+Fully responsive
+ Technical Notes 
+•
+Use YouTube embed (not self-hosted videos)
+•
+Use lazy loading
+•
+Use modular JS for quiz logic
+•
+Do not reload page during quiz
+•
+Keep performance optimized
+ Final Page Flow 
+Fraud Detection Page: 
+1. Intro Section
+2. Video Learning Grid
+3. Quiz Section
+4. Result Screen
+5. Certificate Download
+
+=== PAGE 5 ===
+Task3: 
+1:  Make the “Essential” button clickable. 
+When user taps/clicks the button, redirect to the Credit & Score 
+Management page. 
+•
+Add proper link/route
+•
+Must work on mobile tap & desktop click
+•
+Do not change design or styling
+ 2: Developer Prompt – Credit & Score Management Page (Videos + Quiz + Certificate).
+ Objective 
+Create a dedicated Credit & Score Management Learning Page that includes: 
+•
+10–15 trusted / government-backed financial literacy videos
+•
+Quiz section
+•
+Certificate generation after passing
+ PAGE STRUCTURE 
+Title: Credit, EMI & Loan Management Hub 
+Subtitle: Learn how credit scores work, manage EMIs wisely, and avoid loan traps through trusted 
+financial education. 
+ 2 Add Educational Videos (Embed via YouTube iframe) 
+Use: <iframe  
+  src="VIDEO_LINK" 
+  loading="lazy" 
+  allowfullscreen> 
+</iframe> 
+
+=== PAGE 6 ===
+ 
+ 
+ 
+ 
+  Government / Trusted Credit & Loan Education Videos 
+Below are safe searchable official sources (stable and scalable)
+ 
+🇮🇳 RBI – Reserve Bank of India 
+1. RBI Financial Education – Credit & Loans Basics 
+https://www.youtube.com/results?search_query=RBI+credit+loan+basics 
+2. RBI – Responsible Borrowing 
+https://www.youtube.com/results?search_query=RBI+responsible+borrowing 
+3. RBI – Digital Lending Safety 
+https://www.youtube.com/results?search_query=RBI+digital+lending+safety 
+4. RBI – EMI & Loan Awareness 
+https://www.youtube.com/results?search_query=RBI+EMI+loan+awareness 
+ 
+🇮🇳 SEBI – Investor & Financial Awareness 
+5. SEBI – Personal Finance & Debt Planning 
+https://www.youtube.com/results?search_query=SEBI+personal+finance+debt 
+6. SEBI – Avoid Loan & Investment Fraud 
+https://www.youtube.com/results?search_query=SEBI+loan+investment+fraud 
+🇮🇳 NCFE – National Centre for Financial Education 
+7. NCFE – Credit Management for Youth 
+https://www.youtube.com/results?search_query=NCFE+credit+management 
+8. NCFE – Financial Discipline & EMI Planning 
+https://www.youtube.com/results?search_query=NCFE+EMI+planning 
+ 
+🇮🇳 IEPF – Investor Education & Protection Fund 
+9. IEPF – Loan & Borrowing Awareness 
+https://www.youtube.com/results?search_query=IEPF+loan+awareness 
+10. IEPF – Avoid Debt Trap 
+https://www.youtube.com/results?search_query=IEPF+debt+trap 
+  Credit Score & CIBIL Education (Trusted Informational) 
+11. What is Credit Score India (CIBIL basics) 
+https://www.youtube.com/results?search_query=What+is+credit+score+India 
+12. How EMI Impacts Credit Score 
+https://www.youtube.com/results?search_query=EMI+impact+on+credit+score 
+
+=== PAGE 7 ===
+ 
+11. Improve Your Credit Score India
+https://www.youtube.com/results?search_query=Improve+credit+score+India
+12. Loan Default Consequences India
+https://www.youtube.com/results?search_query=Loan+default+impact+India
+13. Good Debt vs Bad Debt Explained
+https://www.youtube.com/results?search_query=Good+debt+vs+bad+debt+India
+ 3️rd   Quiz Section: After watching videos, 
+add: Section Title: Test Your Credit Knowledge 
+Passing Criteria: 
+•
+70% minimum
+•
+Retry option if failed
+•
+Unlock certificate if passed
+
+=== PAGE 8 ===
+ 
+ 4️ Certificate Section 
+On passing: 
+Display: 
+•
+User name input
+•
+Generate certificate including:
+o
+Name
+o
+Course Title: Credit & Score Management
+o
+Date
+o
+Unique Certificate ID
+Add: 
+•
+Download as PDF
+•
+Print option
+ Technical Requirements 
+•
+Use YouTube embed only
+•
+Quiz without page reload
+•
+Fully responsive
+•
+Maintain dark/light UI theme
+ Final Page Flow 
+Credit & Score Page: 
+1. Intro Section
+2. Video Grid (10–15 videos)
+3. Quiz Section
+4. Result Screen
+5. Certificate Download
+
+=== PAGE 9 ===
+Task4:  
+1: Make the “Advanced” button clickable. 
+When user taps/clicks the button, redirect to the Investment 
+Planning page. 
+•
+Add proper link/route
+•
+Must work on mobile tap & desktop click
+•
+Do not change design or styling
+2: Developer Prompt – Investment Planning Page (Videos + Quiz + Certificate) 
+ Objective 
+Create a dedicated Investment Planning Learning Page including: 
+•
+10–15 government-approved / trusted financial education videos
+•
+Short quiz section
+•
+Certificate generation after passing
+ PAGE STRUCTURE 
+1 Title: Investment Planning & Money Management Hub 
+Subtitle: Learn smart investing, budgeting, and financial planning from trusted financial authorities. 
+ 2  Add Educational Videos (Embed via YouTube) 
+Eg.  iframe: 
+<iframe  
+  src="VIDEO_LINK" 
+  loading="lazy" 
+  allowfullscreen> 
+</iframe> 
+
+=== PAGE 10 ===
+ 
+ Government / Trusted Financial Education Videos (Direct Accessible Links) 
+Below are safe official sources + direct searchable YouTube links (stable & scalable): 
+🇮🇳 RBI – Reserve Bank of India Financial Education 
+1. RBI Financial Education – Basics of Banking
+https://www.youtube.com/results?search_query=RBI+financial+education+banking+basics
+2. RBI – Digital Payment Safety
+https://www.youtube.com/results?search_query=RBI+digital+payment+safety
+3. RBI – Safe Digital Transactions
+https://www.youtube.com/results?search_query=RBI+safe+digital+transactions
+🇮🇳 SEBI – Investor Education 
+4. SEBI Investor Awareness – Mutual Funds
+https://www.youtube.com/results?search_query=SEBI+investor+awareness+mutual+funds
+5. SEBI – Stock Market Basics
+https://www.youtube.com/results?search_query=SEBI+stock+market+basics
+6. SEBI – Avoid Investment Scams
+https://www.youtube.com/results?search_query=SEBI+avoid+investment+scams
+🇮🇳 NCFE – National Centre for Financial Education 
+7. NCFE Financial Literacy Program
+https://www.youtube.com/results?search_query=NCFE+financial+literacy
+8. NCFE Money Management for Youth
+https://www.youtube.com/results?search_query=NCFE+money+management
+🇮🇳 IEPF – Investor Education & Protection Fund 
+9. IEPF Awareness – Investor Rights
+https://www.youtube.com/results?search_query=IEPF+investor+education
+10. IEPF – Protect Yourself from Fraud Investments
+https://www.youtube.com/results?search_query=IEPF+investment+fraud
+
+=== PAGE 11 ===
+ 
+ Mutual Fund & Investment Awareness (Government-backed campaigns) 
+11. Mutual Funds Sahi Hai (AMFI)
+https://www.youtube.com/results?search_query=Mutual+Funds+Sahi+Hai+campaign
+12. Stock Market for Beginners India
+https://www.youtube.com/results?search_query=Stock+market+basics+India+government
+ Personal Finance & Budgeting (Educational) 
+13. Government Financial Literacy Campaign India
+https://www.youtube.com/results?search_query=Government+financial+literacy+India
+14. Basics of Investment Planning India
+https://www.youtube.com/results?search_query=Investment+planning+India+financial+education
+15. Long Term Wealth Creation Basics
+https://www.youtube.com/results?search_query=Long+term+investment+basics+India
+ 3️rd   Quiz Section 
+After watching videos: Give 5 (MCQ)quiz to user at the completion of 
+video  
+
+=== PAGE 12 ===
+ 
+ 
+ 
+ 
+ 
+ 
+Passing Rule: 
+• 
+Minimum 70% 
+• 
+If failed → Retry 
+• 
+If passed → Unlock Certificate 
+ 
+  4️ Certificate Section 
+When user passes: 
+Display: 
+• 
+Name input field 
+• 
+Generate certificate with: 
+o Name 
+o Course Title: Investment Planning & Money Management 
+o Date 
+o Unique Certificate ID 
+Add: 
+• 
+Download as PDF 
+• 
+Print option 
+ 
+  Technical Requirements 
+• 
+Use YouTube embed only (no hosting) 
+• 
+Lazy load videos 
+• 
+Quiz must work without page reload 
+• 
+Fully responsive 
+• 
+Maintain existing dark/light theme UI 
+
+=== PAGE 13 ===
+ 
+ Final Page Flow 
+Investment Planning Page: 
+1. Intro Section
+2. Video Grid (10–15 videos)
+3. Quiz Section
+4. Result Screen
+5. Certificate Download
+Task5:  
+Make the “AI-Powered” button clickable. 
+When user taps/clicks the button, redirect to the AI Analysis page. 
+On the AI Analysis page: 
+Keep: 
+•
+Design consistent with current theme
+•
+Fully responsive
+•
+No styling changes to button
+
+=== PAGE 14 ===
+Task7:  Implement an AI-Based 12-Question Assessment Test that appears First after 
+user login/signup Process.
+ Functional Requirements 
+1 Trigger Behavior 
+•
+After successful login/signup, automatically display a modal popup
+assessment test.
+•
+The popup must block access to the dashboard until completed.
+•
+The test should appear in the user’s selected language (use existing language
+preference system).
+2 Assessment Structure 
+Task6:  
+1: Make the “For Bharat” button clickable. 
+When user taps/clicks the button, redirect  to the Language 
+Support bar. 
+•
+Add proper link/route
+•
+Must work on mobile tap & desktop click
+•
+Do not change design or styling
+2: At Language Support Bar, give a choice to user for select a 
+content language from the given choices. 
+(Hindi, Gujarati, Marathi, Tamil, Maithili and English. ) 
+
+=== PAGE 15 ===
+•
+Total Questions: 12
+•
+Categories:
+o
+Fraud & Digital Security Awareness (Q1–Q4)
+o
+Credit, Money, Savings & Expenses (Q5–Q8)
+o
+Investment Sectors & Plans (Q9–Q12)
+•
+Question Type: MCQ  (4 options each)
+•
+Time Limit: 4️0 seconds for assessment
+•
+Auto-move to next question after timer expires.
+3️ rd    Questions Structure 
+ Section 1: Fraud & Digital Security Awareness (Q1–Q4️) 
+Q1.  You receive a message: 
+“Your bank account will be blocked today. Click here immediately to verify your details.” 
+What should you do? 
+A) Click the link and verify
+B) Ignore or report it as phishing
+C) Reply and ask for confirmation
+D) Forward to friends
+Q2.  Which of the following is a strong password? 
+A) 12345678
+B) myname@123
+C) P@9xL!7qZ#21
+D) password123
+Q3️.  You notice multiple small unknown transactions (₹99, ₹149) from your card. What 
+is this likely? 
+A) Bank technical error
+B) Trial charge before major fraud
+C) Cashback adjustment
+D) Subscription renewal
+
+=== PAGE 16 ===
+ 
+ 
+ 
+Q4️.  Which is the safest practice when using public WiFi? 
+A) Logging into banking apps 
+B) Sharing OTP with customer care 
+C) Using VPN or avoiding sensitive transactions 
+D) Saving passwords in browser
+ 
+  Section 2: Credit, Money, Savings & Expenses (Q5–Q8) 
+ 
+Q5.  If you spend more than you earn every month, this leads to: 
+A) Savings growth 
+B) Financial stability 
+C) Debt accumulation 
+D) Credit score increase
+ 
+Q6.   What does a high credit score indicate? 
+A) You have no bank account 
+B) You repay loans responsibly 
+C) You earn a high salary 
+D) You avoid using credit
+ 
+Q7.  Which expense is considered a “liability”? 
+A) Investment in mutual funds 
+B) Buying groceries 
+C) Buying a car on loan 
+D) Fixed deposit
+ 
+Q8.  The 50-30-20 rule suggests: 
+A) 50% luxury, 30% bills, 20% tax 
+B) 50% needs, 3️0% wants, 20% savings 
+C) 50% savings, 30% rent, 20% travel 
+D) 50% tax, 30% investment, 20% EMI
+ 
+  Section 3️: Investment Sectors & Plans (Q9–Q12) 
+ 
+
+=== PAGE 17 ===
+Q9.  Which investment generally carries the highest risk? 
+A) Fixed Deposit
+B) Government Bonds
+C) Equity Stocks
+D) Savings Account
+Q10.  SIP (Systematic Investment Plan) is commonly associated with: 
+A) Real Estate
+B) Mutual Funds
+C) Gold Jewelry
+D) Cryptocurrency Mining
+Q11.  Diversification in investment means: 
+A) Putting all money in one stock
+B) Avoiding investment
+C) Investing in different asset types to reduce risk
+D) Only investing in gold
+Q12.  If an investment promises “Guaranteed 40% monthly returns with zero risk,” it is 
+most likely: 
+A) Safe government scheme
+B) High-growth startup
+C) Ponzi or scam scheme
+D) Bank FD
+44
+ th     Timer Logic 
+•
+Display a visible countdown timer (40 → 0 seconds).
+•
+If time runs out: Automatically lock the assessment.
+5 Scoring Logic 
+•
+5 point per correct answer.
+•
+Calculate total score at the end.
+Level Classification: 
+
+=== PAGE 18 ===
+If score <= 20 → Beginner 
+If score 20–40 → Intermediate 
+If score 40–60 → Advanced 
+Store in database: 
+•
+assessment_completed: true
+•
+score: number
+•
+assigned_level: string
+•
+category-wise score breakdown
+6   Result Screen 
+After submission: 
+Display: 
+•
+Total Score
+•
+Assigned Level (Beginner / Intermediate / Advanced)
+•
+Category-wise performance summary
+At the bottom, display this exact line: 
+“This is not a test of intelligence. It measures fraud awareness level to personalize your 
+learning journey.” 
+Add a “Continue to Dashboard” button. 
+7      UI Requirements 
+•
+Use modal overlay.
+•
+consistent with current UI.
+•
+Smooth question transition animation.
+•
+Progress indicator (e.g., Question 3 of 12).
+•
+Responsive for mobile + desktop.
+8     Technical Requirements 
+
+=== PAGE 19 ===
+•
+Questions should be stored in structured format (JSON recommended).
+•
+Language support should dynamically swap question text.
+•
+Prevent page refresh bypass (if assessment not completed → force popup).
+•
+Store completion in database/local storage to avoid repeated showing.
+9      Optional Enhancements (If Time Permits) 
+•
+Add progress bar.
+•
+Add animated AI level reveal.
+•
+Add feedback insights.
+ Expected Output Flow 
+Login → Assessment Popup → 12 Questions → Score Calculation → Level Assignment 
+→Result Screen → Dashboard Access
+
