@@ -6,7 +6,9 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     if (!hash) {
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      document.documentElement.style.scrollBehavior = 'auto'; // Temporarily disable smooth scroll
+      window.scrollTo(0, 0);
+      document.documentElement.style.scrollBehavior = 'smooth'; // Re-enable for anchor links
     }
   }, [pathname, hash])
 

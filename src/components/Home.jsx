@@ -11,10 +11,14 @@ export default function Home() {
 
   useEffect(() => {
     if (location.hash) {
-      const section = document.querySelector(location.hash)
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" })
-      }
+      setTimeout(() => {
+        const section = document.querySelector(location.hash)
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" })
+        }
+      }, 100)
+    } else {
+        window.scrollTo({ top: 0, behavior: "smooth" })
     }
   }, [location])
 

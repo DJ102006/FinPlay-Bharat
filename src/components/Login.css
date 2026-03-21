@@ -111,6 +111,27 @@
     box-shadow: 0 10px 20px rgba(59, 31, 255, 0.2);
 }
 
+.status-message {
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.status-message.error {
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+    border: 1px solid rgba(255, 68, 68, 0.2);
+}
+
+.status-message.success {
+    background: rgba(0, 200, 81, 0.1);
+    color: #00c851;
+    border: 1px solid rgba(0, 200, 81, 0.2);
+}
+
 .footer-text {
     margin-top: 30px;
     text-align: center;
